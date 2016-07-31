@@ -1,4 +1,4 @@
-package ru.igrocki.im_a_good
+package ru.fintech.feedback_streamer
 
 import com.typesafe.config.{Config, ConfigFactory}
 
