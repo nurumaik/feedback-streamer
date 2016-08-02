@@ -23,12 +23,8 @@ libraryDependencies ++= Seq(
   "org.apache.kafka" %% "kafka" % "0.8.2.1",
   "com.datastax.spark" %% "spark-cassandra-connector-embedded" % "1.6.0",
   "org.scala-lang" % "scala-reflect" % "2.11.8",
-  "io.spray" %% "spray-can" % "1.3.3",
-  "io.spray" %% "spray-routing" % "1.3.3",
-  "io.spray" %% "spray-testkit" % "1.3.3" % "test",
-  "com.typesafe.akka" %% "akka-actor" % "2.3.9",
-  "com.typesafe.akka" %% "akka-testkit" % "2.3.9" % "test",
+  "com.typesafe.akka" %% "akka-actor" % "2.4.8",
+  "com.typesafe.akka" %% "akka-testkit" % "2.4.8" % "test",
   "me.lessis"          %% "courier"          % "0.1.3",
-  "javax.mail" % "mail" % "1.5.0-b01",
-  "com.typesafe" % "config" % "1.2.1"
+  "com.typesafe" % "config" % "1.3.0"
 )
