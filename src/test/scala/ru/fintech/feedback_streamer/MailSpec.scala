@@ -9,7 +9,7 @@ import org.jvnet.mock_javamail.Mailbox
 import org.scalatest.WordSpecLike
 import org.scalatest.Matchers
 import org.scalatest.BeforeAndAfterAll
-
+import org.scalatest.Inside._
 import scala.concurrent._
 import scala.concurrent.duration._
 
@@ -32,8 +32,9 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
       val petyainbox = Mailbox.get("petya@petya.com")
       petyainbox.size shouldBe 1
       val msg = petyainbox.get(0)
-      //TODO: POPOV SHOULD NOT SEE THIS
-      msg.getContent.asInstanceOf[String] should include ("some link")
+      inside(msg.getContent) {
+        case s: String => s should include ("some link")
+      }
     }
     "Not send an email to targets not specified as responsibles for that source " in {
       val spamActor = system.actorOf(SpamActor.confProp)
