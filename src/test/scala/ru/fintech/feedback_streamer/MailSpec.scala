@@ -44,11 +44,13 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
       val petyainbox = Mailbox.get("petya@petya.ru")
       petyainbox.size shouldBe 0
     }
-    //TODO: Should we test that some error or warning appearing in log
+    //TODO: Should we test that some error or warning appearing in log?
+    /*
     "Report an error if there is some trouble sending an email" in {
     }
     "Report a warning if there is no responsibles for source" in {
     }
+    */
 
     //Responsibles management
     "Start with empty responsibles for each source" in {
@@ -69,7 +71,6 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
       val responsibles2 :SpamActor.RespStorage = Map(
         Bankiru -> Set("masha@masha.ru", "petya@petya.com"),
         Facebook -> Set.empty)
-
       val responsibles3 :SpamActor.RespStorage = responsibles2 - Facebook
 
       //TODO: replace this boilerplate with something readable

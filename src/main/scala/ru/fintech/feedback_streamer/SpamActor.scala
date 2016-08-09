@@ -4,6 +4,7 @@ import javax.mail.internet.InternetAddress
 
 import akka.actor.Actor
 import akka.actor.Props
+import akka.event.Logging
 import com.typesafe.config.ConfigFactory
 import courier.Defaults._
 import courier._
@@ -47,11 +48,20 @@ object SpamActor {
 class SpamActor(private val mailer :Mailer) extends Actor {
   import SpamActor._
 
+  val log = Logging(context.system, this)
+
   def receive = responsiblesDispatcher(defaultresponsibles)
 
   def responsiblesDispatcher(responsibles :RespStorage): Receive = {
-    case ProcessComment(src, link) =>
-      responsibles(src) map { email => mailer(renderMessage(link, email)) }
+    case ProcessComment(src, link) => {
+      if (responsibles(src).isEmpty)
+        log.warning(s"No handlers for source ${src.toString}")
+
+      responsibles(src) foreach { email =>
+        val err_f = {case msg :Throwable => log.error(s"Error while sending message to $email: ${msg.toString}") }
+        mailer(renderMessage(link, email)).onFailure(err_f)
+      }
+    }
     case UpdateResponsibles(newresp) =>
       context become (responsiblesDispatcher(defaultresponsibles ++ newresp), discardOld = true)
     case GetResponsibles =>
