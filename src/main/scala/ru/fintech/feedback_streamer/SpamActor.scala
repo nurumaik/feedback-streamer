@@ -32,11 +32,12 @@ object SpamActor {
   case class Responsibles(resp: RespStorage)
 
   private val conf = ConfigFactory.load()
+  private val senderConf = conf.getConfig("spammer.sender")
 
-  private val defaultMailer = Mailer(conf.getString("spammer.sender.host"), conf.getInt("spammer.sender.port"))
+  private val defaultMailer = Mailer(senderConf.getString("host"), senderConf.getInt("port"))
     .auth(true)
-    .as(conf.getString("spammer.sender.login"), conf.getString("spammer.sender.password"))
-    .startTtls(conf.getBoolean("spammer.sender.startTtls"))()
+    .as(senderConf.getString("login"), senderConf.getString("password"))
+    .startTtls(senderConf.getBoolean("startTtls"))()
 
   val confProp = Props(classOf[SpamActor], defaultMailer)
 
@@ -59,6 +60,7 @@ class SpamActor(private val mailer :Mailer) extends Actor {
     Facebook -> Set.empty
   )
 
+  //TODO: external CommentEmailRenderer class?
   private def renderMessage(link :String, to :String) = {
     val Array(fromAddr) = InternetAddress.parse(conf.getString("spammer.sender.host"))
     val Array(toAddr) = InternetAddress.parse(to)
