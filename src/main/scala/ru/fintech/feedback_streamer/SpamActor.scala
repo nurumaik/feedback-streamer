@@ -47,15 +47,19 @@ object SpamActor {
 class SpamActor(private val mailer :Mailer) extends Actor {
   import SpamActor._
 
-  def receive = {
-    case ProcessComment(src, link) => responsibles(src) map {email => mailer(renderMessage(link, email))}
-    case UpdateResponsibles(newresp) => responsibles = newresp
-    case GetResponsibles => sender() ! Responsibles(responsibles)
+  def receive = responsiblesDispatcher(defaultresponsibles)
+
+  def responsiblesDispatcher(responsibles :RespStorage): Receive = {
+    case ProcessComment(src, link) =>
+      responsibles(src) map { email => mailer(renderMessage(link, email)) }
+    case UpdateResponsibles(newresp) =>
+      context become (responsiblesDispatcher(defaultresponsibles ++ newresp), discardOld = true)
+    case GetResponsibles =>
+      sender() ! Responsibles(responsibles)
   }
 
-  //This is not expected to grow beyond 1k elements, so I dont think we need to think about effectivness
-  //TODO: Maybe we can make it more IMMUTABLE and YOBA implementing responsibles change through BECOME instead of var
-  private var responsibles: RespStorage = Map(
+  //Can be some default handlers in future
+  private val defaultresponsibles: RespStorage = Map(
     Bankiru -> Set.empty,
     Facebook -> Set.empty
   )
