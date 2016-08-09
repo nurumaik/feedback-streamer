@@ -44,7 +44,7 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
       val petyainbox = Mailbox.get("petya@petya.ru")
       petyainbox.size shouldBe 0
     }
-    //TODO: think about error reporting. Logs?
+    //TODO: Should we test that some error or warning appearing in log
     "Report an error if there is some trouble sending an email" in {
     }
     "Report a warning if there is no responsibles for source" in {

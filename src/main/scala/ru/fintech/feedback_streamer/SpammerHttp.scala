@@ -5,6 +5,9 @@ import akka.actor._
 import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.stream._
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import akka.http.scaladsl.server.Directives
+import spray.json._
 import com.typesafe.config.ConfigFactory
 
 /**
