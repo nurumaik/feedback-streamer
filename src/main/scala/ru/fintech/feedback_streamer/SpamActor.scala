@@ -58,8 +58,8 @@ class SpamActor(private val mailer :Mailer) extends Actor {
         log.warning(s"No handlers for source ${src.toString}")
 
       responsibles(src) foreach { email =>
-        val err_f = {case msg :Throwable => log.error(s"Error while sending message to $email: ${msg.toString}") }
-        mailer(renderMessage(link, email)).onFailure(err_f)
+        mailer(renderMessage(link, email)).onFailure({
+          case msg :Throwable => log.error(s"Error while sending message to $email: ${msg.toString}") })
       }
     }
     case UpdateResponsibles(newresp) =>

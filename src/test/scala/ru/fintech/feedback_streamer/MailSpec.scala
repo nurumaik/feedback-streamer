@@ -55,7 +55,7 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
     //Responsibles management
     "Start with empty responsibles for each source" in {
       val spamActor = system.actorOf(SpamActor.confProp)
-      within(5 seconds) {
+      within(1 second) {
         spamActor ! SpamActor.GetResponsibles
         expectMsg(SpamActor.Responsibles(Map(Bankiru -> Set.empty, Facebook -> Set.empty)))
         expectNoMsg
@@ -74,21 +74,21 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
       val responsibles3 :SpamActor.RespStorage = responsibles2 - Facebook
 
       //TODO: replace this boilerplate with something readable
-      within(5 seconds) {
+      within(1 second) {
         spamActor ! SpamActor.UpdateResponsibles(responsibles1)
         spamActor ! SpamActor.GetResponsibles
         expectMsg(SpamActor.Responsibles(responsibles1))
         expectNoMsg
       }
 
-      within(5 seconds) {
+      within(1 second) {
         spamActor ! SpamActor.UpdateResponsibles(responsibles2)
         spamActor ! SpamActor.GetResponsibles
         expectMsg(SpamActor.Responsibles(responsibles2))
         expectNoMsg
       }
 
-      within(5 seconds) {
+      within(1 second) {
         spamActor ! SpamActor.UpdateResponsibles(responsibles3)
         spamActor ! SpamActor.GetResponsibles
         expectMsg(SpamActor.Responsibles(responsibles2))
