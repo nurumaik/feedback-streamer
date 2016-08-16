@@ -21,13 +21,12 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
   }
 
   "A Spam actor" must {
-    //TODO: make more levels of tests
+    //TODO: restructure tests
     //Comment processing
     "Send an email containing link to comment if target is specified as responsibles for that source" in {
       val spamActor = system.actorOf(SpamActor.confProp)
       spamActor ! SpamActor.UpdateResponsibles(Map(Bankiru -> Set("vasya@vasya.ru", "petya@petya.com")))
       spamActor ! SpamActor.ProcessComment(Bankiru, "some link")
-      //TODO: this is terribly wrong, but returning future from actor is not good either
       Thread.sleep(1000)
       val petyainbox = Mailbox.get("petya@petya.com")
       petyainbox.size shouldBe 1
@@ -40,18 +39,10 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
       val spamActor = system.actorOf(SpamActor.confProp)
       spamActor ! SpamActor.UpdateResponsibles(Map(Bankiru -> Set("vasya@vasya.ru", "petya@petya.ru"), Facebook -> Set.empty))
       spamActor ! SpamActor.ProcessComment(Facebook, "some link")
-      //TODO: this is terribly wrong, but returning future from actor is not good either
       Thread.sleep(1000)
       val petyainbox = Mailbox.get("petya@petya.ru")
       petyainbox.size shouldBe 0
     }
-    //TODO: Should we test that some error or warning appearing in log?
-    /*
-    "Report an error if there is some trouble sending an email" in {
-    }
-    "Report a warning if there is no responsibles for source" in {
-    }
-    */
 
     //Responsibles management
     "Start with empty responsibles for each source" in {
@@ -64,7 +55,6 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
     }
 
     "Return same responsibles it just got from set operation" in {
-      //TODO: maybe it should check emails for validness or some other shit at this stage?
       val spamActor = system.actorOf(SpamActor.confProp)
       val responsibles1 :SpamActor.RespStorage = Map(
         Bankiru -> Set("vasya@vasya.ru", "petya@petya.com"),
@@ -74,7 +64,6 @@ class MailSpec() extends TestKit(ActorSystem("MailSpec")) with ImplicitSender
         Facebook -> Set.empty)
       val responsibles3 :SpamActor.RespStorage = responsibles2 - Facebook
 
-      //TODO: replace this boilerplate with something readable
       within(1 second) {
         spamActor ! SpamActor.UpdateResponsibles(responsibles1)
         spamActor ! SpamActor.GetResponsibles

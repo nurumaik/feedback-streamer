@@ -22,6 +22,8 @@ import scala.concurrent.Await
   * Created by Qman on 8/9/2016.
   */
 
+//========EARLY VERSION, NOT A SUBJECT TO REAL CODE-REVIEW======
+
 //TODO:
 // * email verification
 // * marshalling
@@ -33,7 +35,6 @@ trait SpamConfigRoutes extends DefaultJsonProtocol with SprayJsonSupport {
   implicit val timeout: Timeout = 5 seconds
   val routes = pathPrefix("spamconfig") {
     (path("get_responsibles") & get) {
-      //TODO: implement this
       val resp = Await.result( spamActor ? SpamActor.GetResponsibles, 5 seconds)
       resp match {
         case SpamActor.Responsibles(respmap) => {

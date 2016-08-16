@@ -13,7 +13,7 @@ import courier._
   * Created by Qman on 8/2/2016.
   */
 
-//TODO: this is a stub, common types should not belong to my class
+//TODO: Types should move somewhere else on connecting code with comment provider
 sealed trait CommentSource
 case object Bankiru extends CommentSource
 case object Facebook extends CommentSource
@@ -23,7 +23,7 @@ object SpamActor {
   //TODO: Should this type alias be there? Should I alias this at all?
   type RespStorage = Map[CommentSource, Set[String]]
 
-  //TODO: This signature is a piece of shit, get rid asap
+  //TODO: Change signature on connecting code with comment provider
   case class ProcessComment(src: CommentSource, link: String)
 
   case class UpdateResponsibles(newresp: RespStorage)
@@ -74,7 +74,7 @@ class SpamActor(private val mailer :Mailer) extends Actor {
     Facebook -> Set.empty
   )
 
-  //TODO: external CommentEmailRenderer class?
+  //TODO: external CommentEmailRenderer class
   private def renderMessage(link :String, to :String) = {
     val Array(fromAddr) = InternetAddress.parse(conf.getString("spammer.sender.host"))
     val Array(toAddr) = InternetAddress.parse(to)
