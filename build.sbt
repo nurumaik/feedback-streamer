@@ -32,5 +32,8 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.0",
   "org.scalatest" % "scalatest_2.11" % "3.0.0" % "test",
   "org.scala-lang" % "scala-reflect" % "2.11.8",
-  "org.jvnet.mock-javamail" % "mock-javamail" % "1.9" % "test"
+  "org.jvnet.mock-javamail" % "mock-javamail" % "1.9" % "test",
+  "org.scalatra.scalate" %% "scalate-core" % "1.7.0"
 )
+
+Twirl.settings
